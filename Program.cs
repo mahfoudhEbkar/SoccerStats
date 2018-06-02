@@ -15,6 +15,15 @@ namespace SoccerStats
             var fileName = Path.Combine(currentDirectory, "SoccerGameResults.csv");
             var fileContents = ReadResults(fileName);
 
+            foreach (var lines in fileContents)
+            {
+                Console.WriteLine("\n");
+                foreach (var line in lines)
+                {
+                    Console.Write(line);
+                }
+            }
+
             //var file  = new FileInfo(fileName);
 
             //if (file.Exists)
@@ -53,9 +62,18 @@ namespace SoccerStats
             using (var reader = new StreamReader(fileName))
             {
                 //while((reader.ReadLine()) != null )
+                reader.Peek();
                 while (reader.Peek() > -1)
                 {
-                    soccerResults.Add(reader.ReadLine().Split(','));
+                    var gameResult = new GameResult();
+                    string[] values = reader.ReadLine().Split(',');
+                    //gameResult.GameDate = DateTime.Parse(values[0]);
+                    DateTime gameDate;
+                    if(DateTime.TryParse(values[0], out gameDate))
+                    {
+                        gameResult.GameDate = gameDate;
+                    }
+                    soccerResults.Add(values);
                 }
             }
             return soccerResults;
