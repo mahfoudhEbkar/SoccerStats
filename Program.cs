@@ -15,14 +15,14 @@ namespace SoccerStats
             var fileName = Path.Combine(currentDirectory, "SoccerGameResults.csv");
             var fileContents = ReadResults(fileName);
 
-            foreach (var lines in fileContents)
-            {
-                Console.WriteLine("\n");
-                foreach (var line in lines)
-                {
-                    Console.Write(line);
-                }
-            }
+            //foreach (var lines in fileContents)
+            //{
+            //    Console.WriteLine("\n");
+            //    foreach (var line in lines)
+            //    {
+            //        Console.Write(line);
+            //    }
+            //}
 
             //var file  = new FileInfo(fileName);
 
@@ -56,9 +56,9 @@ namespace SoccerStats
             }    
         }
 
-        public static List<string[]> ReadResults(string fileName)
+        public static List<GameResult> ReadResults(string fileName)
         {
-            var soccerResults = new List<string[]>();
+            var soccerResults = new List<GameResult>();
             using (var reader = new StreamReader(fileName))
             {
                 //while((reader.ReadLine()) != null )
@@ -67,13 +67,21 @@ namespace SoccerStats
                 {
                     var gameResult = new GameResult();
                     string[] values = reader.ReadLine().Split(',');
+
                     //gameResult.GameDate = DateTime.Parse(values[0]);
                     DateTime gameDate;
+
                     if(DateTime.TryParse(values[0], out gameDate))
                     {
                         gameResult.GameDate = gameDate;
                     }
-                    soccerResults.Add(values);
+                    gameResult.TeamName = values[1];
+                    HomeOrAway homeOrAway;
+                    if (Enum.TryParse(values[2], out homeOrAway))
+                    {
+                        gameResult.HomeOrAway = homeOrAway;
+                    }
+                    soccerResults.Add(gameResult);
                 }
             }
             return soccerResults;
