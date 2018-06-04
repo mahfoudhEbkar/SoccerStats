@@ -75,12 +75,42 @@ namespace SoccerStats
                     {
                         gameResult.GameDate = gameDate;
                     }
+
                     gameResult.TeamName = values[1];
+
                     HomeOrAway homeOrAway;
                     if (Enum.TryParse(values[2], out homeOrAway))
                     {
                         gameResult.HomeOrAway = homeOrAway;
                     }
+
+                    int parseInt;
+                    if(int.TryParse(values[3], out parseInt))
+                    {
+                        gameResult.Goals = parseInt;
+                    }
+                   
+                    if(int.TryParse(values[4], out parseInt))
+                    {
+                        gameResult.GoalAttempts = parseInt;
+                    }
+                     
+                    if(int.TryParse(values[5], out parseInt))
+                    {
+                        gameResult.ShotsOffGoal = parseInt;
+                    }
+                     
+                    if(int.TryParse(values[6], out parseInt))
+                    {
+                        gameResult.ShotsOnGoal = parseInt;
+                    }
+
+                    double parseDouble;
+                    if (double.TryParse(values[7], out parseDouble))
+                    {
+                        gameResult.PosessionPercent = parseDouble;
+                    }
+
                     soccerResults.Add(gameResult);
                 }
             }
