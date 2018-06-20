@@ -14,14 +14,18 @@ namespace SoccerStats
             string currentDirectory = Directory.GetCurrentDirectory();
             //DirectoryInfo directory = new DirectoryInfo(currentDirectory);
             //var fileName = Path.Combine(currentDirectory, "SoccerGameResults.csv");
+
             var fileName = Path.Combine(currentDirectory, "players.json");
+            
             var jsonFileContents = DeserializePlayer(fileName);
             //var fileContents = ReadResults(fileName);
+            SerializePlayers(jsonFileContents, @"C:\Users\mebkar\source\repos\SoccerStats\SoccerStats");
+            var topTenPlayers = GetTopTenPlayers(jsonFileContents);
 
-            foreach (var player in jsonFileContents)
+            foreach (var player in topTenPlayers)
             {
 
-                Console.WriteLine(player.first_name);
+                Console.WriteLine("Name: "+ player.firstName + " points per game: " + player.pointsPerGame);
 
             }
 
@@ -140,6 +144,36 @@ namespace SoccerStats
             }
                 
             return players;
+        }
+
+        public static void SerializePlayers(List<Player> players, string currentDirectory)
+        {
+            var serializer = new JsonSerializer();
+            var fileName = Path.Combine(currentDirectory, "players_new.json");
+            using (var streamWriter = new StreamWriter(fileName))
+            using (JsonWriter writer = new JsonTextWriter(streamWriter))
+            {
+                serializer.Serialize(writer, players);
+            }
+        }
+
+        public static List<Player> GetTopTenPlayers(List<Player> players)
+        {
+            var topTenPlayers = new List<Player>();
+            players.Sort(new PlayerComparer());
+
+            var counter = 0;
+            foreach (var player in players)
+            {
+                topTenPlayers.Add(player);
+                counter++;
+                if(counter == 10)
+                {
+                    break;
+                }
+            }
+            
+            return topTenPlayers;
         }
     }
 }
