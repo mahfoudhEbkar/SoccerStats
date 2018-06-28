@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Net;
 using Newtonsoft.Json;
 
 
@@ -11,6 +12,8 @@ namespace SoccerStats
     {
         static void Main(string[] args)
         {
+
+            Console.WriteLine(GetGoogleHomePage());
             string currentDirectory = Directory.GetCurrentDirectory();
             //DirectoryInfo directory = new DirectoryInfo(currentDirectory);
             //var fileName = Path.Combine(currentDirectory, "SoccerGameResults.csv");
@@ -174,6 +177,27 @@ namespace SoccerStats
             }
             
             return topTenPlayers;
+        }
+
+        public static string GetGoogleHomePage()
+        {
+            WebClient client = new WebClient();
+            //Stream data = client.OpenRead("https://google.com");
+            //StreamReader reader = new StreamReader(data);
+            //string result = reader.ReadToEnd();
+            //data.Close();
+            //reader.Close();
+
+            //return result;
+
+            byte[] googleHome = client.DownloadData("https://google.com");
+            
+            using(Stream stream = new MemoryStream(googleHome))
+            using (StreamReader reader = new StreamReader(stream))
+            {
+
+                return reader.ReadToEnd();
+            }
         }
     }
 }
