@@ -13,24 +13,25 @@ namespace SoccerStats
         static void Main(string[] args)
         {
 
-            Console.WriteLine(GetGoogleHomePage());
-            string currentDirectory = Directory.GetCurrentDirectory();
-            //DirectoryInfo directory = new DirectoryInfo(currentDirectory);
-            //var fileName = Path.Combine(currentDirectory, "SoccerGameResults.csv");
+            Console.WriteLine(GetNewsForPlayer("Diego Valeri"));
+            //Console.WriteLine(GetGoogleHomePage());
+            //string currentDirectory = Directory.GetCurrentDirectory();
+            ////DirectoryInfo directory = new DirectoryInfo(currentDirectory);
+            ////var fileName = Path.Combine(currentDirectory, "SoccerGameResults.csv");
 
-            var fileName = Path.Combine(currentDirectory, "players.json");
+            //var fileName = Path.Combine(currentDirectory, "players.json");
             
-            var jsonFileContents = DeserializePlayer(fileName);
-            //var fileContents = ReadResults(fileName);
-            SerializePlayers(jsonFileContents, @"C:\Users\mebkar\source\repos\SoccerStats\SoccerStats");
-            var topTenPlayers = GetTopTenPlayers(jsonFileContents);
+            //var jsonFileContents = DeserializePlayer(fileName);
+            ////var fileContents = ReadResults(fileName);
+            //SerializePlayers(jsonFileContents, @"C:\Users\mebkar\source\repos\SoccerStats\SoccerStats");
+            //var topTenPlayers = GetTopTenPlayers(jsonFileContents);
 
-            foreach (var player in topTenPlayers)
-            {
+            //foreach (var player in topTenPlayers)
+            //{
 
-                Console.WriteLine("Name: "+ player.firstName + " points per game: " + player.pointsPerGame);
+            //    Console.WriteLine("Name: "+ player.firstName + " points per game: " + player.pointsPerGame);
 
-            }
+            //}
 
 
             //foreach (var lines in fileContents)
@@ -193,6 +194,21 @@ namespace SoccerStats
             byte[] googleHome = client.DownloadData("https://google.com");
             
             using(Stream stream = new MemoryStream(googleHome))
+            using (StreamReader reader = new StreamReader(stream))
+            {
+
+                return reader.ReadToEnd();
+            }
+        }
+
+
+        public static string GetNewsForPlayer(string playerName)
+        {
+            WebClient client = new WebClient();
+            client.Headers.Add("Ocp-Apim-Subscription-Key", "ee4694e7c6d74efe9e36c706c56c24b7");
+            byte[] searchResult = client.DownloadData(string.Format("https://api.cognitive.microsoft.com/bing/v7.0/news/search?q={0}&mkt=en-us",playerName));
+
+            using (Stream stream = new MemoryStream(searchResult))
             using (StreamReader reader = new StreamReader(stream))
             {
 
