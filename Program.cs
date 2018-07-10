@@ -202,18 +202,25 @@ namespace SoccerStats
         }
 
 
-        public static string GetNewsForPlayer(string playerName)
+        public static List<NewsResult> GetNewsForPlayer(string playerName)
         {
+            var result = new List<NewsResult>();
             WebClient client = new WebClient();
-            client.Headers.Add("Ocp-Apim-Subscription-Key", "ee4694e7c6d74efe9e36c706c56c24b7");
+            var serializer = new JsonSerializer();
+
+            client.Headers.Add("Ocp-Apim-Subscription-Key", "ffb1733437f64d5cac25e309941151af");
             byte[] searchResult = client.DownloadData(string.Format("https://api.cognitive.microsoft.com/bing/v7.0/news/search?q={0}&mkt=en-us",playerName));
 
             using (Stream stream = new MemoryStream(searchResult))
             using (StreamReader reader = new StreamReader(stream))
+            using (var jsonReader = new JsonTextReader(reader))
             {
-
-                return reader.ReadToEnd();
+                result = serializer.Deserialize<NewsSearch>(jsonReader).NewsResults;
+               
             }
+            return result;
         }
     }
 }
+
+            
