@@ -13,25 +13,29 @@ namespace SoccerStats
         static void Main(string[] args)
         {
 
-            Console.WriteLine(GetNewsForPlayer("Diego Valeri"));
+            //Console.WriteLine(GetNewsForPlayer("Diego Valeri"));
             //Console.WriteLine(GetGoogleHomePage());
-            //string currentDirectory = Directory.GetCurrentDirectory();
-            ////DirectoryInfo directory = new DirectoryInfo(currentDirectory);
-            ////var fileName = Path.Combine(currentDirectory, "SoccerGameResults.csv");
+            string currentDirectory = Directory.GetCurrentDirectory();
+            //DirectoryInfo directory = new DirectoryInfo(currentDirectory);
+            //var fileName = Path.Combine(currentDirectory, "SoccerGameResults.csv");
 
-            //var fileName = Path.Combine(currentDirectory, "players.json");
-            
-            //var jsonFileContents = DeserializePlayer(fileName);
-            ////var fileContents = ReadResults(fileName);
-            //SerializePlayers(jsonFileContents, @"C:\Users\mebkar\source\repos\SoccerStats\SoccerStats");
-            //var topTenPlayers = GetTopTenPlayers(jsonFileContents);
+            var fileName = Path.Combine(currentDirectory, "players.json");
 
-            //foreach (var player in topTenPlayers)
-            //{
+            var jsonFileContents = DeserializePlayer(fileName);
+            //var fileContents = ReadResults(fileName);
+            SerializePlayers(jsonFileContents, @"C:\Users\mebkar\source\repos\SoccerStats\SoccerStats");
+            var topTenPlayers = GetTopTenPlayers(jsonFileContents);
 
-            //    Console.WriteLine("Name: "+ player.firstName + " points per game: " + player.pointsPerGame);
+            foreach (var player in topTenPlayers)
+            {
 
-            //}
+                List<NewsResult> newsResults =  GetNewsForPlayer(string.Format("{0} {1}" , player.firstName , player.lastName));
+
+                foreach (var item in newsResults)
+                {
+                    Console.WriteLine(string.Format("Date: {0:f}, HeadLine: {1}, Summary: {2} \n", item.DatePublished, item.HeadLine, item.Summary));
+                }
+            }
 
 
             //foreach (var lines in fileContents)
